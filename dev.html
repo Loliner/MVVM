@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        {{ name }}
+        <p>{{ name }}</p>
+        <p>{{ age }}</p>
+        <p>{{ msg }}</p>
+        <p></p>
+    </div>
+    <script src="dist/MVVM.js"></script>
+    <script>
+    new MVVM('#app', {
+        data: {
+            name: 'Loliner',
+            age: 25,
+            msg: 'We are one.'
+        },
+        methods: {
+            changeMessage: function() {
+                this.msg = 'My first MVVM demo.';
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>
