@@ -11,6 +11,18 @@ class MVVM {
     }
 
     parseNode(el) {
+        let attrs = el.attributes;
+        for (let i = 0; i < attrs.length; i++) {
+            let match = /^v\-(\w+)/i.exec(attrs[i].name);
+            if (match && match[1] && ['text'].indexOf(match[1]) > -1) {
+                let key = attrs[i].value;
+                if (this.bindings[key]) {
+                    this.bindings[key].nodes.push(el);
+                } else {
+                    this.createAccessor(attrs[i].value, el);
+                }
+            }
+        }
         for (let i = 0; i < el.childNodes.length; i++) {
             let node = el.childNodes[i];
             // 节点
