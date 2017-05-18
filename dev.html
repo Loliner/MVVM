@@ -8,18 +8,17 @@
 
 <body>
     <div id="app">
-        {{ name }}
-        <p>{{ name }}</p>
-        <p>{{ age }}</p>
-        <p>{{ msg }}</p>
-        <p v-text="msg"></p>
+        <p v-show="age">1</p>
+        <p v-text="msg">2</p>
+        <p v-text="msg">3</p>
+        <p v-show="msg">{{ name }}</p>
     </div>
     <script src="dist/MVVM.js"></script>
     <script>
     new MVVM('#app', {
         data: {
             name: 'Loliner',
-            age: 25,
+            age: 11,
             msg: 'We are one.'
         },
         methods: {
