@@ -1,6 +1,8 @@
 import Directive from './Directive.js'
 import directives from './directives.js'
 
+const ATTR_REG = /^v\-(\w+)(:(\w+))*/i;
+const ATTR_FOR_REG = /\s*(\w+)\s+in\s+(\w+)\s*/i;
 class MVVM {
     constructor(selector, options) {
         this.el = window.document.querySelector(selector);
@@ -21,11 +23,16 @@ class MVVM {
     parseDirectives(el) {
         const attrs = el.attributes;
         for (let i = 0; i < attrs.length; i++) {
-            const match = /^v\-(\w+)(:(\w+))*/i.exec(attrs[i].name);
+            const match = ATTR_REG.exec(attrs[i].name);
             if (match && match[1] && directives[match[1]]) {
                 const directName = match[1];
                 const directType = match[3];
-                const dataKey = attrs[i].value;
+                let dataKey = attrs[i].value;
+                if (ATTR_FOR_REG.test(dataKey)) {
+                    const keyMatch = ATTR_FOR_REG.exec(dataKey);
+                    dataKey = keyMatch[2];
+                }
+                el.removeAttribute(attrs[i].name);
                 this.bind(dataKey, directName, directType, el);
             }
         }
@@ -51,13 +58,12 @@ class MVVM {
     }
 
     bind(dataKey, directName, directType, node) {
+        let directive = new Directive(directName, directType, node);
+        directive.mvvm = this;
+
         if (this.bindings[dataKey]) {
-            let directive = new Directive(directName, directType, node);
-            directive.mvvm = this;
             this.bindings[dataKey].directives.push(directive);
         } else {
-            let directive = new Directive(directName, directType, node);
-            directive.mvvm = this;
             let binding = {
                 value: '',
                 directives: [directive]

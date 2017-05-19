@@ -8,19 +8,27 @@
 
 <body>
     <div id="app">
-        <p v-show="age">1</p>
-        <p v-text="msg">2</p>
-        <p v-text="msg">3</p>
-        <p v-show="msg">{{ name }}</p>
+        <p v-show="show">show p</p>
+        <p v-text="text"></p>
+        <p>{{ text }}</p>
+        <ul>
+            <li v-for="item in list" v-text="text"></li>
+        </ul>
         <button v-on:click="changeMessage">click</button>
     </div>
     <script src="dist/MVVM.js"></script>
     <script>
     new MVVM('#app', {
         data: {
-            name: 'Loliner',
-            age: 11,
-            msg: 'We are one.',
+            show: true,
+            text: 'I am Loliner.',
+            list: [{
+                name: 'Loliner'
+            }, {
+                name: 'Jack'
+            }, {
+                name: 'Tom'
+            }],
             changeMessage: function() {
                 this.data.msg = 'My first MVVM demo.';
             }
