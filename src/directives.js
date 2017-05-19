@@ -9,7 +9,11 @@ export default {
             el.style.display = 'none';
         }
     },
-    on: function () {
-
+    on: {
+        update: function (el, handler) {
+            const type = this.type;
+            handler = handler.bind(this.mvvm);
+            el.addEventListener(type, handler, false);
+        }
     }
 }

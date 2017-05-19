@@ -11,7 +11,6 @@ class MVVM {
         for (let key in options.data) {
             this.data[key] = options.data[key];
         }
-
     }
 
     parseNode(el) {
@@ -20,56 +19,63 @@ class MVVM {
     }
 
     parseDirectives(el) {
-        let attrs = el.attributes;
+        const attrs = el.attributes;
         for (let i = 0; i < attrs.length; i++) {
-            let match = /^v\-(\w+)/i.exec(attrs[i].name);
+            const match = /^v\-(\w+)(:(\w+))*/i.exec(attrs[i].name);
             if (match && match[1] && directives[match[1]]) {
-                let key = attrs[i].value;
-                if (this.bindings[key]) {
-                    this.bindings[key].directives.push(new Directive(match[1], el));
-                } else {
-                    this.createAccessor(attrs[i].value, match[1], el);
-                }
+                const directName = match[1];
+                const directType = match[3];
+                const dataKey = attrs[i].value;
+                this.bind(dataKey, directName, directType, el);
             }
         }
     }
 
     parseChild(el) {
         for (let i = 0; i < el.childNodes.length; i++) {
-            let node = el.childNodes[i];
+            const node = el.childNodes[i];
             // 节点
             if (node.nodeType === 1) {
                 this.parseNode(node);
                 // 文本节点
             } else if (node.nodeType === 3) {
-                let match = /{{\s*(\w+)\s*}}/i.exec(node.textContent);
+                const match = /{{\s*(\w+)\s*}}/i.exec(node.textContent);
                 if (match && match[1]) {
-                    let key = match[1];
-                    if (this.bindings[key]) {
-                        this.bindings[key].directives.push(new Directive('text', node));
-                    } else {
-                        this.createAccessor(key, 'text', node);
-                    }
+                    const directName = 'text';
+                    const directType = '';
+                    const dataKey = match[1];
+                    this.bind(dataKey, directName, directType, node);
                 }
             }
         }
     }
 
-    createAccessor(key, directName, node) {
-        let binding = {
-            value: '',
-            directives: [new Directive(directName, node)]
-        };
-        this.bindings[key] = binding;
+    bind(dataKey, directName, directType, node) {
+        if (this.bindings[dataKey]) {
+            let directive = new Directive(directName, directType, node);
+            directive.mvvm = this;
+            this.bindings[dataKey].directives.push(directive);
+        } else {
+            let directive = new Directive(directName, directType, node);
+            directive.mvvm = this;
+            let binding = {
+                value: '',
+                directives: [directive]
+            };
+            this.bindings[dataKey] = binding;
+            this.createAccessor(dataKey, binding);
+        }
+    }
 
+    createAccessor(key, binding) {
         Object.defineProperty(this.data, key, {
-            get: function (key) {
+            get: function () {
                 return binding.value;
             },
             set: function (newVal) {
                 binding.value = newVal;
                 for (let i = 0; i < binding.directives.length; i++) {
-                    let direct = binding.directives[i];
+                    const direct = binding.directives[i];
                     direct.update(this, newVal);
                 }
             }

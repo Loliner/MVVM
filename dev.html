@@ -12,6 +12,7 @@
         <p v-text="msg">2</p>
         <p v-text="msg">3</p>
         <p v-show="msg">{{ name }}</p>
+        <button v-on:click="changeMessage">click</button>
     </div>
     <script src="dist/MVVM.js"></script>
     <script>
@@ -19,11 +20,9 @@
         data: {
             name: 'Loliner',
             age: 11,
-            msg: 'We are one.'
-        },
-        methods: {
+            msg: 'We are one.',
             changeMessage: function() {
-                this.msg = 'My first MVVM demo.';
+                this.data.msg = 'My first MVVM demo.';
             }
         }
     });
