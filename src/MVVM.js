@@ -5,7 +5,11 @@ const ATTR_REG = /^v\-(\w+)(:(\w+))*/i;
 const ATTR_FOR_REG = /\s*(\w+)\s+in\s+(\w+)\s*/i;
 class MVVM {
     constructor(selector, options) {
-        this.el = window.document.querySelector(selector);
+        if (Object.prototype.toString.call(selector) === '[object String]') {
+            this.el = window.document.querySelector(selector);
+        } else {
+            this.el = selector;
+        }
         this.data = {};
         this.bindings = {};
         this.parseNode(this.el);
@@ -86,6 +90,14 @@ class MVVM {
                 }
             }
         });
+    }
+
+    destroy() {
+        this.el.parentNode.removeChild(this.el);
+        // for (let i = 0; i < binding.directives.length; i++) {
+        //     const direct = binding.directives[i];
+        //     direct.unbind && direct.unbind(this);
+        // }
     }
 
 }

@@ -14,7 +14,8 @@
         <ul>
             <li v-for="item in list" v-text="text"></li>
         </ul>
-        <button v-on:click="changeMessage">click</button>
+        <button v-on:click="changeMessage">changeMessage</button>
+        <button v-on:click="changeList">changeList</button>
     </div>
     <script src="dist/MVVM.js"></script>
     <script>
@@ -30,7 +31,18 @@
                 name: 'Tom'
             }],
             changeMessage: function() {
-                this.data.msg = 'My first MVVM demo.';
+                this.data.text = 'My first MVVM demo.';
+            },
+            changeList: function() {
+                this.data.list = [{
+                    name: '婉莹'
+                }, {
+                    name: '杨阳'
+                }, {
+                    name: '玉婷'
+                }, {
+                    name: '金玲'
+                }]
             }
         }
     });
