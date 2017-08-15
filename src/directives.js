@@ -19,8 +19,7 @@ export default {
         }
     },
     for: {
-        update: function (el, value) {debugger;
-
+        update: function (el, value) {
             if (!this.container) {
                 this.container = el.parentNode;
                 this.container.innerHTML = '';
@@ -34,14 +33,10 @@ export default {
                 this.childMVVM = [];
             }
 
-            // let parent = el.parentNode;
             const attrs = el.attributes;
-            // parent.innerHTML = '';
+
             for (let i = 0; i < value.length; i++) {
-                let node = document.createElement(el.tagName);
-                for (let j = 0; j < attrs.length; j++) {
-                    node.setAttribute(attrs[j].name, attrs[j].value);
-                }
+                const node = el.cloneNode(true);
                 const mvvm = new MVVM(node, {
                     data: value[i]
                 });

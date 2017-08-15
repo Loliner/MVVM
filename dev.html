@@ -7,16 +7,21 @@
 </head>
 
 <body>
+
+
     <div id="app">
         <p v-show="show">show p</p>
         <p v-text="text"></p>
         <p>{{ text }}</p>
         <ul>
-            <li v-for="item in list" v-text="text"></li>
+            <li v-for="item in list">{{ name }}</li>
         </ul>
         <button v-on:click="changeMessage">changeMessage</button>
         <button v-on:click="changeList">changeList</button>
     </div>
+
+
+
     <script src="dist/MVVM.js"></script>
     <script>
     new MVVM('#app', {
@@ -46,6 +51,7 @@
             }
         }
     });
+
     </script>
 </body>
 

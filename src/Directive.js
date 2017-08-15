@@ -7,25 +7,21 @@ class Directive {
         if (Object.prototype.toString.call(direct) === '[object Function]') {
             this._update = direct;
             this.type = type;
-            this.nodes = [node];
+            this.node = node;
         } else if (Object.prototype.toString.call(direct) === '[object Object]') {
             this._update = direct.update;
             this._bind = direct.bind;
             this.type = type;
-            this.nodes = [node];
+            this.node = node;
         }
     }
 
     update(mvvm, newVal) {
-        for (let i = 0; i < this.nodes.length; i++) {
-            this._update(this.nodes[i], newVal);
-        }
+        this._update(this.node, newVal);
     }
 
     bind(mvvm) {
-        for (let i = 0; i < this.nodes.length; i++) {
-            this._bind(this.nodes[i], newVal);
-        }
+        this._bind(this.node, newVal);
     }
 }
 
